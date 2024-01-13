@@ -21,12 +21,14 @@ describe('action', () => {
     jest.clearAllMocks()
   })
 
-  it('sets the time output', async () => {
+  it('set output to success', async () => {
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation(name => {
       switch (name) {
-        case 'milliseconds':
-          return '500'
+        case 'API_KEY':
+          return 'abcd'
+        case 'PROJECT_KEY':
+          return '12345abc'
         default:
           return ''
       }
@@ -36,28 +38,18 @@ describe('action', () => {
     expect(runMock).toHaveReturned()
 
     // Verify that all of the core library functions were called correctly
-    expect(debugMock).toHaveBeenNthCalledWith(1, 'Waiting 500 milliseconds ...')
-    expect(debugMock).toHaveBeenNthCalledWith(
-      2,
-      expect.stringMatching(timeRegex)
-    )
-    expect(debugMock).toHaveBeenNthCalledWith(
-      3,
-      expect.stringMatching(timeRegex)
-    )
-    expect(setOutputMock).toHaveBeenNthCalledWith(
-      1,
-      'time',
-      expect.stringMatching(timeRegex)
-    )
+    expect(debugMock).toHaveBeenNthCalledWith(1, 'API_KEY = abcd')
+    expect(debugMock).toHaveBeenNthCalledWith(2, 'PROJECT_KEY = 12345abc')
+
+    expect(setOutputMock).toHaveBeenNthCalledWith(1, 'result', 'success')
   })
 
   it('sets a failed status', async () => {
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation(name => {
       switch (name) {
-        case 'milliseconds':
-          return 'this is not a number'
+        case 'API_KEY':
+          return ''
         default:
           return ''
       }
@@ -69,7 +61,7 @@ describe('action', () => {
     // Verify that all of the core library functions were called correctly
     expect(setFailedMock).toHaveBeenNthCalledWith(
       1,
-      'milliseconds not a number'
+      'Missing API_KEY or PROJECT_KEY'
     )
   })
 
@@ -77,8 +69,8 @@ describe('action', () => {
     // Set the action's inputs as return values from core.getInput()
     getInputMock.mockImplementation(name => {
       switch (name) {
-        case 'milliseconds':
-          throw new Error('Input required and not supplied: milliseconds')
+        case 'API_KEY':
+          throw new Error('Input required and not supplied: API_KEY')
         default:
           return ''
       }
@@ -90,7 +82,7 @@ describe('action', () => {
     // Verify that all of the core library functions were called correctly
     expect(setFailedMock).toHaveBeenNthCalledWith(
       1,
-      'Input required and not supplied: milliseconds'
+      'Input required and not supplied: API_KEY'
     )
   })
 })
