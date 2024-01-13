@@ -1,18 +1,20 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Lokalise API PUSH'
+description: 'Triggers build on Lokalise that creates a PR'
+author: 'Andreassim'
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  API_KEY:  # Lokalise API key
+    description: 'API KEY'
     required: true
-    default: '1000'
+  PROJECT_KEY: #Lokalise Projekt key 
+    description: "Project key"
+    required: true
 
 # Define your outputs here.
 outputs:
-  time:
-    description: 'Your output description here'
+  result:
+    description: 'succesful or not'
 
 runs:
   using: node20
